@@ -1,6 +1,5 @@
 import socket as s
 
-
 server_ip = input("Enter an IP Address (Hit enter for localhost): ")
 if(len(server_ip) == 0):
     server_ip = 'localhost'

@@ -1,7 +1,5 @@
 import socket as s
 
-from NetworksProjects.ChatApp.Zeldin_ChatApp_Server import connection_socket
-
 server_ip = input("Enter an IP Address (Hit enter for localhost): ")
 if(len(server_ip) == 0):
     server_ip = 'localhost'

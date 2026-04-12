@@ -61,8 +61,7 @@ while True:
         print(server_message)
         connection_socket.send(server_message.encode())
     else:
-        server_message = server_username + ': ' + server_message
-        print(server_message)
+        print(server_username + ': ' + server_message)
         connection_socket.send(server_message.encode())
         break
 

@@ -34,7 +34,7 @@ client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
 client_socket.connect((server_ip, server_port))
 server_username = client_socket.recv(2048).decode()
 client_socket.send(client_username.encode())
-print("Connection accepted. Send the first message: ")
+print("Connection to server established. Send the first message: ")
 
 while True:
 
@@ -45,9 +45,16 @@ while True:
         print(client_message)
         client_socket.send(client_message.encode())
     else:
-        print(client_message)
-
+        print(client_username + ': ' + client_message)
+        client_socket.send(client_message.encode())
+        break
 
     server_message = client_socket.recv(2048).decode()
-    print(server_message)
+    if(server_message == 'end'):
+        print("Server ended session")
+        break
+    else:
+        print(server_message)
+
+client_socket.close()
 

@@ -27,34 +27,55 @@ while True:
 
 client_username = input("Enter your username: ")
 
-#Creates a client socket
+# Creates a client socket
 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
 
-#Connects the client socket to the server
+# Connects the client socket to the server
 client_socket.connect((server_ip, server_port))
+
+# Receives the server username first and sends
+# the client username so both ends have each
+# others' usernames
 server_username = client_socket.recv(2048).decode()
 client_socket.send(client_username.encode())
+
 print("Connection to server established. Send the first message: ")
 
 while True:
 
-    client_message = input()
+    client_message = input(client_username + ": ")
 
     if(client_message != 'end'):
-        client_message = client_username + ': ' + client_message
-        print(client_message)
-        client_socket.send(client_message.encode())
+        # Try/except loop to make sure the connection
+        # hasn't been lost
+        try:
+            client_socket.send(client_message.encode())
+        except OSError:
+            print("Connection lost. Ending session...")
+            break
+
     else:
-        print(client_username + ': ' + client_message)
-        client_socket.send(client_message.encode())
+
+        try:
+            client_socket.send(client_message.encode())
+        except OSError:
+            print("Connection lost. Ending session...")
+            # There's no need for a break in this block because it will
+            # break anyways. This is just to let the user know
+            # that the connection was lost
         break
 
-    server_message = client_socket.recv(2048).decode()
+    try:
+        server_message = client_socket.recv(2048).decode()
+    except OSError:
+        print("Connection lost. Ending session... ")
+        break
+
     if(server_message == 'end'):
         print("Server ended session")
         break
     else:
-        print(server_message)
+        print(server_username + ': ' + server_message)
 
 client_socket.close()
 

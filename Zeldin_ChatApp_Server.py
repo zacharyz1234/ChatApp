@@ -30,7 +30,11 @@ server_username = input("Enter your username: ")
 server_socket = s.socket(s.AF_INET, s.SOCK_STREAM) #STREAM FOR TCP
 
 #Bind server socket to IP and port
-server_socket.bind((server_ip, server_port))
+try:
+    server_socket.bind((server_ip, server_port))
+except OSError:
+    print("Server binding failed. Ending program...")
+    exit()
 
 #Server is listening for incoming connections
 server_socket.listen(1)
@@ -52,16 +56,13 @@ while True:
     else:
         print(client_username + ': ' + client_message)
 
-    server_message = input("Enter a message: ")
+    server_message = input(server_username + ": ")
     # Client will have a similar if statement to
     # concatenate their username to the message
     # if it isn't the end statement
     if(server_message != 'end'):
-        server_message = server_username + ": " + server_message
-        print(server_message)
         connection_socket.send(server_message.encode())
     else:
-        print(server_username + ': ' + server_message)
         connection_socket.send(server_message.encode())
         break
 

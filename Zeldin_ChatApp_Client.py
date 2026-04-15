@@ -27,17 +27,25 @@ while True:
 
 client_username = input("Enter your username: ")
 
+
 # Creates a client socket
 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
 
-# Connects the client socket to the server
-client_socket.connect((server_ip, server_port))
+try:
+    # Connects the client socket to the server
+    client_socket.connect((server_ip, server_port))
+except OSError:
+    print("Could not connect to server. Ending session")
+    exit
 
-# Receives the server username first and sends
-# the client username so both ends have each
-# others' usernames
-server_username = client_socket.recv(2048).decode()
-client_socket.send(client_username.encode())
+try:
+    # Receives the server username first and sends
+    # the client username so both ends have each
+    # others' usernames
+    server_username = client_socket.recv(2048).decode()
+except OSError:
+    client_socket.send(client_username.encode())
+
 
 print("Connection to server established. Send the first message: ")
 

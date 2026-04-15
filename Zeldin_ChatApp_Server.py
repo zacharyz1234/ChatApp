@@ -43,12 +43,24 @@ server_socket.listen(1)
 connection_socket, client_address = server_socket.accept()
 
 # Send the server's username
-connection_socket.send(server_username.encode())
-client_username = connection_socket.recv(2048).decode()
+try:
+    connection_socket.send(server_username.encode())
+except OSError:
+    print("Connection lost. Ending session...")
+
+try:
+    client_username = connection_socket.recv(2048).decode()
+except OSError:
+    print("Connection lost. Ending session...")
+
 print("Connection accepted. Awaiting message...\n")
 
 while True:
-    client_message = connection_socket.recv(2048).decode()
+    try:
+        client_message = connection_socket.recv(2048).decode()
+    except OSError:
+        print("Connection lost. Ending session...")
+        break
 
     if(client_message == 'end'):
         print("Client ended session.")
@@ -61,9 +73,15 @@ while True:
     # concatenate their username to the message
     # if it isn't the end statement
     if(server_message != 'end'):
-        connection_socket.send(server_message.encode())
+        try:
+            connection_socket.send(server_message.encode())
+        except OSError:
+            print("Connection lost. Ending session...")
     else:
-        connection_socket.send(server_message.encode())
+        try:
+            connection_socket.send(server_message.encode())
+        except OSError:
+            print("Connection lost. Ending session...")
         break
 
 # Once the loop is broken the connection ends

@@ -40,7 +40,11 @@ except OSError:
 server_socket.listen(1)
 
 # Accepts the incoming client connection request
-connection_socket, client_address = server_socket.accept()
+try:
+    connection_socket, client_address = server_socket.accept()
+except KeyboardInterrupt:
+    print("Connection lost. Ending session...")
+    exit()
 
 # Send the server's username
 try:

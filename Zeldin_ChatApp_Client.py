@@ -52,7 +52,12 @@ print("Connection to server established. Send the first message: ")
 
 while True:
 
-    client_message = input(client_username + ": ")
+    try:
+        client_message = input(client_username + ": ")
+    except KeyboardInterrupt:
+        print("Connection lost. Ending session...")
+        break
+
 
     if(client_message != 'end'):
         # Try/except loop to make sure the connection

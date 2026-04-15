@@ -72,7 +72,11 @@ while True:
 
     print(client_username + ': ' + client_message)
 
-    server_message = input(server_username + ": ")
+    try:
+        server_message = input(server_username + ": ")
+    except KeyboardInterrupt:
+        print("Connection lost. Ending session...")
+        break
     # Client will have a similar if statement to
     # concatenate their username to the message
     # if it isn't the end statement

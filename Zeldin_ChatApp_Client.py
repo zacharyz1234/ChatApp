@@ -15,7 +15,7 @@ while True:
         # Port is input as a string so code has to typecast to check if the
         # number is valid. Also checks to make sure the port number is between
         # all valid port numbers
-        elif(int(server_port) > 0 and int(server_port) < 65535):
+        elif(int(server_port) > 0 and int(server_port) < 9999):
             # Convert server port number to an int since it is entered
             # as a string
             server_port = int(server_port)

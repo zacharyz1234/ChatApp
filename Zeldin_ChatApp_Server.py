@@ -49,28 +49,28 @@ except KeyboardInterrupt:
 # Send the server's username
 try:
     connection_socket.send(server_username.encode())
-except OSError:
+except KeyboardInterrupt:
     print("Connection lost. Ending session...")
 
 try:
     client_username = connection_socket.recv(2048).decode()
-except OSError:
+except KeyboardInterrupt:
     print("Connection lost. Ending session...")
 
-print("Connection accepted. Awaiting message...\n")
+print("Connection accepted. Awaiting message...")
 
 while True:
     try:
         client_message = connection_socket.recv(2048).decode()
-    except OSError:
+    except KeyboardInterrupt:
         print("Connection lost. Ending session...")
         break
 
     if(client_message == 'end'):
         print("Client ended session.")
         break
-    else:
-        print(client_username + ': ' + client_message)
+
+    print(client_username + ': ' + client_message)
 
     server_message = input(server_username + ": ")
     # Client will have a similar if statement to
@@ -79,12 +79,12 @@ while True:
     if(server_message != 'end'):
         try:
             connection_socket.send(server_message.encode())
-        except OSError:
+        except KeyboardInterrupt:
             print("Connection lost. Ending session...")
     else:
         try:
             connection_socket.send(server_message.encode())
-        except OSError:
+        except KeyboardInterrupt:
             print("Connection lost. Ending session...")
         break
 

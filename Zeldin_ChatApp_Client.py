@@ -34,7 +34,7 @@ client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
 try:
     # Connects the client socket to the server
     client_socket.connect((server_ip, server_port))
-except OSError:
+except KeyboardInterrupt:
     print("Could not connect to server. Ending session")
     exit
 
@@ -43,8 +43,9 @@ try:
     # the client username so both ends have each
     # others' usernames
     server_username = client_socket.recv(2048).decode()
-except OSError:
-    client_socket.send(client_username.encode())
+except KeyboardInterrupt:
+    print("Connection lost. Ending Session...")
+client_socket.send(client_username.encode())
 
 
 print("Connection to server established. Send the first message: ")
@@ -58,7 +59,7 @@ while True:
         # hasn't been lost
         try:
             client_socket.send(client_message.encode())
-        except OSError:
+        except KeyboardInterrupt:
             print("Connection lost. Ending session...")
             break
 
@@ -66,7 +67,7 @@ while True:
 
         try:
             client_socket.send(client_message.encode())
-        except OSError:
+        except KeyboardInterrupt:
             print("Connection lost. Ending session...")
             # There's no need for a break in this block because it will
             # break anyways. This is just to let the user know
@@ -75,7 +76,7 @@ while True:
 
     try:
         server_message = client_socket.recv(2048).decode()
-    except OSError:
+    except KeyboardInterrupt:
         print("Connection lost. Ending session... ")
         break
 
